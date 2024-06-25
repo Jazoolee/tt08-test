@@ -1,6 +1,6 @@
 //`default_nettype none
 
-module processor #(
+module tt_um_processor #(
   WIDTH = 32, IMEM_DEPTH=512, DMEM_DEPTH=32, NUM_REGS=32
 )(
   input  wire clock, reset, insMemEn,
