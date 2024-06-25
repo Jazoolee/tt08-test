@@ -3,7 +3,7 @@
 module tt_um_processor #(
   WIDTH = 32, IMEM_DEPTH=512, DMEM_DEPTH=32, NUM_REGS=32
 )(
-  input  wire clock, reset, insMemEn,
+  input  wire clk, reset, insMemEn,
   input  wire [WIDTH-1:0] insMemDataIn, insMemAddr,
   output reg  [WIDTH-1:0] gp, a7 //verifying
 );
@@ -18,12 +18,12 @@ module tt_um_processor #(
   reg isArithmetic, isImm, isLoadW, isLoadUI, isStoreW, isBranch, isJAL, isJALR, isMUL, isAUIPC, isBranchC, regWriteEn;
   
   //PC
-  always @(posedge clock)
+  always @(posedge clk)
     if (reset) pc <= 0;
     else       pc <= (isJAL|isJALR|isBranchC) ? aluOut : (pc + 4);
 
   //Instruction memory    //initial $readmemh("tests/rv32ui-p-lui.dump.dat", insMemory);
-  always @(posedge clock) 
+  always @(posedge clk) 
     if (insMemEn) insMemory[insMemAddr] <= insMemDataIn;
 
   always @* begin
@@ -103,10 +103,10 @@ module tt_um_processor #(
   end
 
   //Data memory    //initial $readmemh("data/data.dat",dataMemory);
-  always @(posedge clock) 
+  always @(posedge clk) 
     if (isStoreW) dataMemory[aluOut] <= data_2;
 
-  always @(posedge clock) //initial $readmemh("data/registry.dat", registers);
+  always @(posedge clk) //initial $readmemh("data/registry.dat", registers);
     if (regWriteEn) registers[rd] <= regDataIn;
 
 endmodule
